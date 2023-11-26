@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/warehouses/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/warehouses/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/warehouses",
+  "projects": {
+    "warehouses": {
+      "type": "application",
+      "root": "apps/warehouses",
+      "entryFile": "main",
+      "sourceRoot": "apps/warehouses/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/warehouses/tsconfig.app.json"
+      }
+    },
+    "calculations": {
+      "type": "application",
+      "root": "apps/calculations",
+      "entryFile": "main",
+      "sourceRoot": "apps/calculations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/calculations/tsconfig.app.json"
+      }
+    }
+  }
+}
