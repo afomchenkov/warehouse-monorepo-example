@@ -6,6 +6,7 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
+  JoinColumn,
   OneToMany,
 } from 'typeorm';
 import { Customer } from './customer.entity';
@@ -61,6 +62,7 @@ export class Warehouse extends BaseEntity {
   @ManyToOne(() => Customer, (customer) => customer.warehouses, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'customer_id' })
   owner: Customer;
 
   @OneToMany(() => Transaction, (transaction) => transaction.warehouse)

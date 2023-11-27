@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Entity,
+  JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Warehouse } from './warehouse.entity';
@@ -57,10 +58,12 @@ export class Inventory extends BaseEntity {
   @ManyToOne(() => Warehouse, (warehouse) => warehouse.inventories, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'warehouse_id' })
   warehouse: Warehouse;
 
   @ManyToOne(() => Product, (product) => product.inventories, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'product_id' })
   product: Product;
 }

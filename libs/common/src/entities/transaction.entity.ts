@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   Entity,
+  JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Warehouse } from './warehouse.entity';
@@ -65,10 +66,12 @@ export class Transaction extends BaseEntity {
   @ManyToOne(() => Warehouse, (warehouse) => warehouse.transactions, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'warehouse_id' })
   warehouse: Warehouse;
 
   @ManyToOne(() => Product, (product) => product.transactions, {
     onDelete: 'CASCADE',
   })
+  @JoinColumn({ name: 'product_id' })
   product: Product;
 }
