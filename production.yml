@@ -1,0 +1,12 @@
+services:
+  warehouses:
+    build:
+      target: production
+    env_file:
+      - ./apps/warehouses/stage.production.env
+
+  calculations:
+    build:
+      target: production
+    env_file:
+      - ./apps/calculations/stage.production.env

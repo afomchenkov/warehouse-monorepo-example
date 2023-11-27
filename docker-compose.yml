@@ -1,0 +1,41 @@
+version: '3.9'
+services:
+  warehouses:
+    build:
+      context: .
+      dockerfile: ./apps/warehouses/Dockerfile
+      target: development
+    ports:
+      - 3000:3000
+    command: npm run start:dev warehouses
+    env_file:
+      - ./apps/warehouses/stage.development.env
+    volumes:
+      - .:/usr/src/app # detect if there are any files changes to reload the app
+      - /usr/src/app/node_modules # re-use node_modules inside the container
+    depends_on:
+      - db
+
+  calculations:
+    build:
+      context: .
+      dockerfile: ./apps/calculations/Dockerfile
+      target: development
+    ports:
+      - 3001:3001
+    command: npm run start:dev calculations
+    env_file:
+      - ./apps/calculations/stage.development.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: postgres
