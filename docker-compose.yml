@@ -7,12 +7,15 @@ services:
       target: development
     ports:
       - 3000:3000
+    networks:
+      - microservices
     command: npm run start:dev warehouses
     env_file:
       - ./apps/warehouses/stage.development.env
     volumes:
       - .:/usr/src/app # detect if there are any files changes to reload the app
       - /usr/src/app/node_modules # re-use node_modules inside the container
+    restart: unless-stopped
     depends_on:
       - db
 
@@ -23,14 +26,18 @@ services:
       target: development
     ports:
       - 3001:3001
+    networks:
+      - microservices
     command: npm run start:dev calculations
     env_file:
       - ./apps/calculations/stage.development.env
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    restart: unless-stopped
     depends_on:
       - db
+      - warehouses
 
   db:
     image: postgres
@@ -39,3 +46,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: postgres
+    networks:
+      - microservices
+
+networks:
+  microservices:

@@ -9,7 +9,6 @@ RUN npm install
 
 COPY . .
 RUN npm run build
-EXPOSE 3000
 
 # Stage: Build the project production
 FROM node:alpine as production
@@ -24,4 +23,3 @@ RUN npm install --only=production
 COPY . .
 COPY --from=development /usr/src/app/dist ./dist
 CMD ["node", "dist/apps/warehouses/main"]
-EXPOSE 3000
