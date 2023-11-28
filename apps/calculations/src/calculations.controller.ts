@@ -9,4 +9,9 @@ export class CalculationsController {
   getHello(): string {
     return this.calculationsService.getHello();
   }
+
+  @Get('another')
+  anotherHello(): string {
+    return 'another calculation';
+  }
 }

@@ -9,4 +9,9 @@ export class WarehousesController {
   getHello(): string {
     return this.warehousesService.getHello();
   }
+
+  @Get('calculation')
+  async getCalculation(): Promise<string> {
+    return this.warehousesService.callCalculation();
+  }
 }

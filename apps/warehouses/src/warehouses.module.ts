@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WarehousesController } from './warehouses.controller';
 import { WarehousesService } from './warehouses.service';
@@ -8,6 +9,14 @@ import { DbModule } from '@app/common';
 
 @Module({
   imports: [
+    HttpModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        timeout: configService.get('HTTP_TIMEOUT'),
+        maxRedirects: configService.get('HTTP_MAX_REDIRECTS'),
+      }),
+      inject: [ConfigService],
+    }),
     ConfigModule.forRoot({
       envFilePath: [`stage.${process.env.NODE_ENV}.env`],
       validationSchema: configValidationSchema,
