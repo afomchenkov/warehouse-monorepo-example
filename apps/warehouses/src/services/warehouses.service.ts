@@ -12,9 +12,14 @@ export class WarehousesService {
   async callCalculation(): Promise<string> {
     try {
       const response = await this.httpService.axiosRef.get(
-        'http://calculations:3001/another',
+        'http://calculations:3001/calculations/healthcheck',
+        {
+          headers: {
+            'Service-Version': '1',
+          },
+        },
       );
-      return `from warehouses: ${response.data}`;
+      return `from warehouses: calculations::[${response.data}]`;
     } catch (error) {
       console.log(error);
       return JSON.stringify(error);

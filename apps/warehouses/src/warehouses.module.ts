@@ -1,14 +1,45 @@
 import { Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
+import { GraphQLModule } from '@nestjs/graphql';
+import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { WarehousesController } from './warehouses.controller';
-import { WarehousesService } from './warehouses.service';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { configValidationSchema } from '@app/common';
 import { DbModule } from '@app/common';
 
+import { WarehousesService } from './services';
+import {
+  ProductRepository,
+  CustomerRepository,
+  WarehouseRepository,
+} from './repositories';
+import {
+  CustomerResolver,
+  ProductResolver,
+  WarehouseResolver,
+} from './resolvers';
+
+import { WarehousesController } from './warehouses.controller';
+import { GraphqlExceptionsFilter } from './graphql-exceptions.filter';
+
+// GraphQL API served at: http://localhost:3000/graphql
+
 @Module({
   imports: [
+    // set up GraphQL module
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: 'schema.gql',
+      path: 'graphql',
+    }),
+    // set up server inbuilt cache control
+    CacheModule.register({
+      ttl: 7200, // 2hr in seconds
+      max: 1000, // maximum number of items in cache
+      isGlobal: true,
+    }),
     HttpModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -40,6 +71,18 @@ import { DbModule } from '@app/common';
     DbModule,
   ],
   controllers: [WarehousesController],
-  providers: [WarehousesService],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: GraphqlExceptionsFilter,
+    },
+    CustomerResolver,
+    CustomerRepository,
+    ProductResolver,
+    ProductRepository,
+    WarehouseResolver,
+    WarehouseRepository,
+    WarehousesService,
+  ],
 })
 export class WarehousesModule {}

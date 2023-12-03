@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CalculationsController } from './calculations.controller';
+import { CalculationsControllerV1 } from './calculations-v1.controller';
 import { CalculationsService } from './calculations.service';
 import { configValidationSchema } from '@app/common';
 import { DbModule } from '@app/common';
@@ -28,7 +28,7 @@ import { DbModule } from '@app/common';
     }),
     DbModule,
   ],
-  controllers: [CalculationsController],
+  controllers: [CalculationsControllerV1],
   providers: [CalculationsService],
 })
 export class CalculationsModule {}

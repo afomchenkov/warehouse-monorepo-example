@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WarehousesController } from './warehouses.controller';
-import { WarehousesService } from './warehouses.service';
+import { WarehousesService } from './services/warehouses.service';
 
 describe('WarehousesController', () => {
   let warehousesController: WarehousesController;
@@ -15,8 +15,8 @@ describe('WarehousesController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(warehousesController.getHello()).toBe('Hello World!');
+    it('should return "running..."', () => {
+      expect(warehousesController.healthcheck()).toBe('running...');
     });
   });
 });
