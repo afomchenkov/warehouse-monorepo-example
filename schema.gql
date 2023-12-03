@@ -1,0 +1,121 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""transaction entity"""
+type Transaction {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  transactionType: TransactionType!
+  quantity: Int!
+  size: Int!
+  transactionDate: DateTime!
+  warehouse: Warehouse!
+  product: Product!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+enum TransactionType {
+  IMPORT
+  EXPORT
+}
+
+"""product entity"""
+type Product {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+  isHazardous: Boolean!
+  isActive: Boolean!
+  unitSize: Int!
+  transactions: [Transaction!]!
+  inventories: [Inventory!]!
+}
+
+"""inventory entity"""
+type Inventory {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  quantity: Int!
+  size: Int!
+  effectiveDate: DateTime!
+  warehouse: Warehouse!
+  product: Product!
+}
+
+"""warehouse entity"""
+type Warehouse {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+  location: String!
+  maxCapacity: Int!
+  owner: Customer!
+  transactions: [Transaction!]!
+  inventories: [Inventory!]!
+}
+
+"""customer entity"""
+type Customer {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  isActive: Boolean!
+  warehouses: [Warehouse!]!
+}
+
+type Query {
+  customers: [Customer!]!
+  customer(id: Float!): Customer!
+  products: [Product!]!
+  product(id: Float!): Product!
+  warehouses: [Warehouse!]!
+}
+
+type Mutation {
+  """create new customer"""
+  createCustomer(customerData: CreateCustomerDto!): Customer!
+
+  """create new warehouse"""
+  createProduct(warehouseData: CreateWarehouseDto!): Warehouse!
+
+  """
+  update product (isHazardous/unitSize can be changed only if the product is not assigned to any warehouse)
+  """
+  updateProduct(productData: UpdateProductDto!): Product!
+}
+
+input CreateCustomerDto {
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+input CreateWarehouseDto {
+  name: String!
+  description: String!
+  location: String!
+  maxCapacity: Float!
+  customerId: Float!
+}
+
+input UpdateProductDto {
+  id: Float!
+  name: String!
+  description: String!
+}
