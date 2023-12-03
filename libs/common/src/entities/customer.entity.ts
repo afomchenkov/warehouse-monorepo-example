@@ -7,11 +7,14 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
 } from 'typeorm';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Warehouse } from './warehouse.entity';
 
-@Entity({ name: 'cutomers' })
+@ObjectType({ description: 'customer entity' })
+@Entity({ name: 'customers' })
 export class Customer extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
+  @Field(() => Int)
   id: number;
 
   @CreateDateColumn({
@@ -19,6 +22,7 @@ export class Customer extends BaseEntity {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
+  @Field(() => Date)
   createdAt: Date;
 
   @UpdateDateColumn({
@@ -26,6 +30,7 @@ export class Customer extends BaseEntity {
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
+  @Field(() => Date)
   updatedAt: Date;
 
   @Column({
@@ -35,20 +40,30 @@ export class Customer extends BaseEntity {
     nullable: false,
     unique: true,
   })
+  @Field()
   username: string;
 
   @Column({ name: 'first_name' })
+  @Field()
   firstName: string;
 
   @Column({ name: 'last_name' })
+  @Field()
   lastName: string;
 
-  @Column({ name: 'email' })
+  @Column({
+    name: 'email',
+    nullable: false,
+    unique: true,
+  })
+  @Field()
   email: string;
 
   @Column({ default: true, name: 'is_active' })
+  @Field()
   isActive: boolean;
 
   @OneToMany(() => Warehouse, (warehouse) => warehouse.owner)
+  @Field(() => [Warehouse])
   warehouses: Warehouse[];
 }
