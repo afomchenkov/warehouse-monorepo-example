@@ -79,7 +79,7 @@ export class Transaction extends BaseEntity {
     nullable: false,
   })
   @Field(() => Date)
-  transactionDate: string;
+  transactionDate: Date;
 
   @ManyToOne(() => Warehouse, (warehouse) => warehouse.transactions, {
     onDelete: 'CASCADE',

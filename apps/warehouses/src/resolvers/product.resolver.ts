@@ -41,7 +41,7 @@ export class ProductResolver {
     description:
       'update product (isHazardous/unitSize can be changed only if the product is not assigned to any warehouse)',
   })
-  updateProduct(
+  async updateProduct(
     @Args('productData') productData: UpdateProductDto,
   ): Promise<Product> {
     return this.productService.updateProduct(productData);
