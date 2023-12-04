@@ -17,7 +17,7 @@ export class CreateWarehouseDto {
   @Field()
   @IsNotEmpty({ message: 'location is missing' })
   @IsString()
-  @Length(10, 100, { message: 'location length is invalid' })
+  @Length(2, 100, { message: 'location length is invalid' })
   location: string;
 
   @Field()

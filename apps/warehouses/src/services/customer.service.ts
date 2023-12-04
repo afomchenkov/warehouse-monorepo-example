@@ -1,10 +1,12 @@
-import { NotFoundException, Injectable } from '@nestjs/common';
+import { NotFoundException, Injectable, Logger } from '@nestjs/common';
 import { Customer } from '@app/common';
 import { CreateCustomerDto } from '../dtos';
 import { CustomerRepository } from '../repositories';
 
 @Injectable()
 export class CustomerService {
+  private readonly logger = new Logger(CustomerService.name);
+
   constructor(private readonly customerRepository: CustomerRepository) {}
 
   async getCustomers(): Promise<Customer[]> {
@@ -15,7 +17,9 @@ export class CustomerService {
     const customer = await this.customerRepository.getById(id);
 
     if (!customer) {
-      throw new NotFoundException(`Customer not found: ${id}`);
+      const message = `Customer not found: ${id}`;
+      this.logger.debug(message);
+      throw new NotFoundException(message);
     }
 
     return customer;
