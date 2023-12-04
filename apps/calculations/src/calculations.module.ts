@@ -1,13 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CalculationsControllerV1 } from './calculations-v1.controller';
-import { CalculationsService } from './calculations.service';
 import { configValidationSchema } from '@app/common';
 import { DbModule } from '@app/common';
+import { CalculationsControllerV1 } from './calculations-v1.controller';
+import { CalculationsService } from './calculations.service';
+import { CalculationsRepository } from './calculations.repository';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: [`stage.${process.env.NODE_ENV}.env`],
       validationSchema: configValidationSchema,
@@ -29,6 +32,6 @@ import { DbModule } from '@app/common';
     DbModule,
   ],
   controllers: [CalculationsControllerV1],
-  providers: [CalculationsService],
+  providers: [CalculationsService, CalculationsRepository],
 })
 export class CalculationsModule {}

@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { CalculationsService } from './calculations.service';
 
 @Controller({
-  path: 'calculations',
+  path: 'api',
   version: '1',
 })
 export class CalculationsControllerV1 {
@@ -11,5 +11,11 @@ export class CalculationsControllerV1 {
   @Get('healthcheck')
   healthcheck(): string {
     return 'running...';
+  }
+
+  @Get('calculate-inventory')
+  calculateInventory(): string {
+    // do the job
+    return '[inventory]';
   }
 }
