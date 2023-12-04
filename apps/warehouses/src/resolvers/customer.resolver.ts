@@ -1,21 +1,21 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Customer } from '@app/common';
-import { CustomerRepository } from '../repositories';
+import { CustomerService } from '../services';
 import { CreateCustomerDto } from '../dtos';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 @Resolver()
 export class CustomerResolver {
-  constructor(private readonly customerRepository: CustomerRepository) {}
+  constructor(private readonly customerService: CustomerService) {}
 
   @Query((returns) => [Customer])
   async customers(): Promise<Customer[]> {
-    return this.customerRepository.getAll();
+    return this.customerService.getCustomers();
   }
 
   @Query((returns) => Customer)
   async customer(@Args('id') id: number): Promise<Customer> {
-    return this.customerRepository.getById(id);
+    return this.customerService.getCustomerById(id);
   }
 
   @Mutation((returns) => Customer, {
@@ -24,6 +24,6 @@ export class CustomerResolver {
   async createCustomer(
     @Args('customerData') customerData: CreateCustomerDto,
   ): Promise<Customer> {
-    return this.customerRepository.createCustomer(customerData);
+    return this.customerService.createCustomer(customerData);
   }
 }

@@ -9,15 +9,23 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { configValidationSchema } from '@app/common';
 import { DbModule } from '@app/common';
 
-import { WarehousesService } from './services';
 import {
-  ProductRepository,
+  CustomerService,
+  ProductService,
+  TransactionInventoryService,
+  WarehouseService,
+} from './services';
+import {
   CustomerRepository,
+  InventoryRepository,
+  ProductRepository,
+  TransactionRepository,
   WarehouseRepository,
 } from './repositories';
 import {
   CustomerResolver,
   ProductResolver,
+  TransactionResolver,
   WarehouseResolver,
 } from './resolvers';
 
@@ -78,11 +86,17 @@ import { GraphqlExceptionsFilter } from './graphql-exceptions.filter';
     },
     CustomerResolver,
     CustomerRepository,
+    CustomerService,
+    InventoryRepository,
     ProductResolver,
     ProductRepository,
+    ProductService,
+    TransactionRepository,
+    TransactionResolver,
+    TransactionInventoryService,
     WarehouseResolver,
     WarehouseRepository,
-    WarehousesService,
+    WarehouseService,
   ],
 })
 export class WarehousesModule {}
