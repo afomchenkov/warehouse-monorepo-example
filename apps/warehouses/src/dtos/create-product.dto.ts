@@ -12,7 +12,7 @@ export class CreateProductDto {
   @Field({ nullable: false })
   @IsNotEmpty({ message: 'name is missing' })
   @IsString()
-  @Length(3, 70, { message: 'name length is invalid' })
+  @Length(2, 70, { message: 'name length is invalid' })
   name: string;
 
   @Field()

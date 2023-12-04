@@ -1,21 +1,21 @@
 import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Product } from '@app/common';
-import { ProductRepository } from '../repositories';
-import { CreateProductDto, UpdateProductDto } from '../dtos';
+import { ProductService } from '../services';
+import { CreateProductDto, DeleteProductDto, UpdateProductDto } from '../dtos';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 @Resolver()
 export class ProductResolver {
-  constructor(private readonly productRepository: ProductRepository) {}
+  constructor(private readonly productService: ProductService) {}
 
   @Query((returns) => [Product])
   async products(): Promise<Product[]> {
-    return this.productRepository.getAll();
+    return this.productService.getAllProducts();
   }
 
   @Query((returns) => Product)
   async product(@Args('id') id: number): Promise<Product> {
-    return this.productRepository.getById(id);
+    return this.productService.getProductById(id);
   }
 
   @Mutation((returns) => Product, {
@@ -24,7 +24,17 @@ export class ProductResolver {
   async createProduct(
     @Args('productData') productData: CreateProductDto,
   ): Promise<Product> {
-    return this.productRepository.createProduct(productData);
+    return this.productService.createProduct(productData);
+  }
+
+  @Mutation(() => DeleteProductDto, {
+    description:
+      'delete product by ID (only if it is not assigned to inventory)',
+  })
+  async deleteProduct(
+    @Args('productId') id: number,
+  ): Promise<DeleteProductDto> {
+    return this.productService.deleteProduct(id);
   }
 
   @Mutation(() => Product, {
@@ -34,6 +44,6 @@ export class ProductResolver {
   updateProduct(
     @Args('productData') productData: UpdateProductDto,
   ): Promise<Product> {
-    return this.productRepository.updateProduct(productData);
+    return this.productService.updateProduct(productData);
   }
 }

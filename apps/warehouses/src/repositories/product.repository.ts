@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { Product } from '@app/common';
-import { CreateProductDto, UpdateProductDto } from '../dtos';
+import { CreateProductDto, DeleteProductDto, UpdateProductDto } from '../dtos';
 
 @Injectable()
 export class ProductRepository extends Repository<Product> {
@@ -15,16 +15,25 @@ export class ProductRepository extends Repository<Product> {
     return newProduct;
   }
 
-  async updateProduct(productData: UpdateProductDto): Promise<Product> {
-    const { id } = productData;
-    const product = await this.getById(id);
-    // check if a product is assigned at least to one of the warehouses and reject an update
-    return product;
+  async updateProduct(
+    productData: UpdateProductDto,
+    existingProduct: Product,
+  ): Promise<Product> {
+    delete productData.id;
+    const updateProductDataObject: object = {
+      ...existingProduct,
+      ...productData,
+    };
+
+    const updateProductDataQuery = await this.preload(updateProductDataObject);
+    return this.save(updateProductDataQuery);
   }
 
-  // not implemented
-  async deleteProduct(): Promise<void> {
-    return Promise.resolve();
+  async deleteProduct(id: number): Promise<DeleteProductDto> {
+    await this.delete(id);
+    return {
+      id,
+    };
   }
 
   async getAll(): Promise<Product[]> {
