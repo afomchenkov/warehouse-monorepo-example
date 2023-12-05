@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   UpdateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
@@ -41,6 +42,16 @@ export class Warehouse extends BaseEntity {
   })
   @Field(() => Date)
   updatedAt: Date;
+
+  // keep soft delete
+  @CreateDateColumn({
+    name: 'deleted_at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 
   @Column({
     name: 'name',
