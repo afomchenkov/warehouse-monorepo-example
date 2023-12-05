@@ -30,6 +30,7 @@ type Product {
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  deletedAt: DateTime!
   name: String!
   description: String!
   isHazardous: Boolean!
@@ -56,6 +57,7 @@ type Warehouse {
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  deletedAt: DateTime!
   name: String!
   description: String!
   location: String!
@@ -70,6 +72,7 @@ type Customer {
   id: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
+  deletedAt: DateTime!
   username: String!
   firstName: String!
   lastName: String!

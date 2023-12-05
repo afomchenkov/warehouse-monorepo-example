@@ -1,5 +1,18 @@
 ## Description
 
+This is a monorepo for microservice application to run a warehouse system.
+
+To start in a dev environment run:
+```
+npm run docker-compose:dev
+```
+
+this will run four containers:
+- PostgreSQL (username: postgres, pass: postgres)
+- pgAdmin at http://localhost:5050/ (username: admin@admin.com, pass: postgres)
+- Warehouses service at http://localhost:3000
+- Calculations service at http://localhost:3001
+
 
 ## Installation
 
@@ -105,3 +118,109 @@ Keeps the data about a certain inventory amount for a specific product/date.
 
 NB: Stock calculation is simplified, a product has a unit_size (assumed as the (height * width * length) area occupied), the total occupied
 area is calculated as unit_size * items_number and it should not be greater than the warehouse max_capacity.
+
+Examples of GraphQL API queries (served at http://localhost:3000/graphql):
+```
+query WarehousesQuery {
+    warehouses {
+        name,
+        description,
+        location,
+        isHazardous,
+        maxCapacity
+    }
+}
+```
+```
+query CustomersQuery {
+    customers {
+        createdAt
+        updatedAt
+        username,
+        firstName,
+        lastName,
+        email
+    }
+}
+```
+```
+query CustomerQuery {
+    customer(id: 3) {
+        username,
+        firstName,
+        lastName,
+        email
+    }
+}
+```
+```
+mutation CustomerMutation {
+    createCustomer(customerData: {
+        username: "testuser2",
+        firstName: "Test2",
+        lastName: "User",
+        email: "tuser2@test.com"
+    }) {
+        id,
+        username,
+        firstName,
+        lastName,
+        email
+    }
+}
+
+```
+```
+query ProductsQuery {
+    products {
+        name,
+        description,
+        isHazardous,
+        unitSize
+    }
+}
+```
+```
+query WarehousesQuery {
+    warehouses {
+        name,
+        description,
+        location
+    }
+}
+```
+```
+query WarehousesByCustomerQuery {
+    warehousesByOwner(customerId: 1) {
+        name,
+        description,
+        location,
+        maxCapacity
+    }
+}
+```
+```
+mutation WarehouseMutation {
+    createWarehouse(warehouseData: {
+        name: "warehouse16",
+        description: "warehouse16 description",
+        location: "France",
+        maxCapacity: 1000,
+        customerId: 1
+    }) {
+        name,
+        description,
+        location
+    }
+}
+```
+```
+query TransactionsHistoryQuery {
+    transactionsHistoryByWarehouse(warehouseId:1) {
+        transactionType,
+        quantity,
+        size,
+        transactionDate
+    }
+}
+```
