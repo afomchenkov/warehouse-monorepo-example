@@ -78,32 +78,65 @@ type Customer {
   warehouses: [Warehouse!]!
 }
 
+type DeleteProductDto {
+  id: Int!
+}
+
+type StockSnapshotDto {
+  warehouseId: Int!
+  totalMaxAmount: Int!
+  occupiedAmount: Int!
+}
+
 type Query {
   customers: [Customer!]!
   customer(id: Float!): Customer!
   products: [Product!]!
   product(id: Float!): Product!
-  warehouses: [Warehouse!]!
+  transactionsHistoryByWarehouse(warehouseId: Float!): [Transaction!]!
+  transactionsHistoryByDate(warehouseId: Float!, from: String!, to: String!): [Transaction!]!
+  warehousesByOwner(customerId: Float!): [Warehouse!]!
+  warehouseCurrentStockSnapshot(warehouseId: Float!): StockSnapshotDto!
+  allWarehousesCurrentStockSnapshots: [StockSnapshotDto!]!
 }
 
 type Mutation {
-  """create new customer"""
-  createCustomer(customerData: CreateCustomerDto!): Customer!
+  """create new transaction (import/export)"""
+  createCustomer(transactionData: CreateTransactionDto!): Transaction!
 
-  """create new warehouse"""
-  createProduct(warehouseData: CreateWarehouseDto!): Warehouse!
+  """create new product"""
+  createProduct(productData: CreateProductDto!): Product!
+
+  """delete product by ID (only if it is not assigned to inventory)"""
+  deleteProduct(productId: Float!): DeleteProductDto!
 
   """
   update product (isHazardous/unitSize can be changed only if the product is not assigned to any warehouse)
   """
   updateProduct(productData: UpdateProductDto!): Product!
+
+  """create new warehouse"""
+  createWarehouse(warehouseData: CreateWarehouseDto!): Warehouse!
 }
 
-input CreateCustomerDto {
-  username: String!
-  firstName: String!
-  lastName: String!
-  email: String!
+input CreateTransactionDto {
+  transactionType: String!
+  quantity: Float!
+  size: Float!
+  transactionDate: String!
+  warehouseId: Float!
+  productId: Float!
+}
+
+input CreateProductDto {
+  name: String!
+  description: String!
+}
+
+input UpdateProductDto {
+  id: Float!
+  name: String!
+  description: String!
 }
 
 input CreateWarehouseDto {
@@ -112,10 +145,4 @@ input CreateWarehouseDto {
   location: String!
   maxCapacity: Float!
   customerId: Float!
-}
-
-input UpdateProductDto {
-  id: Float!
-  name: String!
-  description: String!
 }

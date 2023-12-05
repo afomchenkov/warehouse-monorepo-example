@@ -66,7 +66,7 @@ the amounts which can possibly be imported/exported in between, we need to set s
   - In order to keep the inventory snapshots in the actual state for every day, we need to run a calculation task every day, it'll take the previous day inventory state and does re-calculation for the current one due to the following reason:
         * no operations can be done for a current day and we need to fill/calculate the inventory
         * a current day can already have future imports so again a re-calculation is needed
-        * the calculation service exposes an API endpoint 'calculation/api/v1/calculate-inventory' to run a task, but it can be triggered by cron job or any other trigger mechanism
+        * the calculation service exposes an API endpoint '/api/calculate-inventory' to run a task, but it can be triggered by cron job or any other trigger mechanism
 ```
 
 
