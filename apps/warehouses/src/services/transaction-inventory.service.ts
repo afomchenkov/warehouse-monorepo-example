@@ -124,7 +124,10 @@ export class TransactionInventoryService {
       );
 
       if (status === CalculationStatus.ACCEPTED) {
-        // commit transaction (ideally the whole operation must be moved to transaction: [update inventory, create transaction])
+        // commit transaction
+        // TODO: ideally the whole operation must be moved to calculation service
+        // or SQL transaction: check calculation -> [update inventory, create transaction])
+        // or add Stored Procedure to do a daily update
         return this.transactionRepository.createTransaction(transactionData);
       }
       if (status === CalculationStatus.REJECTED) {
