@@ -2,7 +2,6 @@ import { NotFoundException, Injectable, Logger } from '@nestjs/common';
 import { Warehouse } from '@app/common';
 import { WarehouseRepository } from '../repositories';
 import { CustomerService } from './customer.service';
-import { TransactionInventoryService } from './transaction-inventory.service';
 import { CreateWarehouseDto, StockSnapshotDto } from '../dtos';
 import { calculateOccupiedArea } from '../utils';
 
@@ -12,7 +11,6 @@ export class WarehouseService {
 
   constructor(
     private readonly customerService: CustomerService,
-    private readonly transactionInventoryService: TransactionInventoryService,
     private readonly warehouseRepository: WarehouseRepository,
   ) {}
 

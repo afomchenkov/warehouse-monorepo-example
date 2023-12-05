@@ -1,4 +1,5 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Repository, Between } from 'typeorm';
+import { addDays } from 'date-fns';
 import { Injectable } from '@nestjs/common';
 import { Customer, Warehouse } from '@app/common';
 import { CreateWarehouseDto } from '../dtos';
@@ -32,11 +33,12 @@ export class WarehouseRepository extends Repository<Warehouse> {
     warehouseId: number,
     date: Date,
   ): Promise<Warehouse> {
-    return await this.findOne({
+    return this.findOne({
       where: {
         id: warehouseId,
         inventories: {
-          effectiveDate: date,
+          // should check without taking into account the time
+          effectiveDate: Between(date, addDays(date, 1)),
         },
       },
     });
@@ -46,7 +48,7 @@ export class WarehouseRepository extends Repository<Warehouse> {
     return this.find({
       where: {
         inventories: {
-          effectiveDate: date,
+          effectiveDate: Between(date, addDays(date, 1)),
         },
       },
     });

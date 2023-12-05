@@ -15,8 +15,8 @@ describe('WarehousesController', () => {
   });
 
   describe('root', () => {
-    it('should return "running..."', () => {
-      expect(warehousesController.healthcheck()).toBe('running...');
+    it('should return "warehouses running..."', () => {
+      expect(warehousesController.healthcheck()).toBe('warehouses running...');
     });
   });
 });
