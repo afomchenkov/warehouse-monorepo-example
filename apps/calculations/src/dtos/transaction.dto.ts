@@ -1,9 +1,5 @@
 import { IsNotEmpty, IsEnum, IsString, IsNumber } from 'class-validator';
-
-export enum TransactionType {
-  IMPORT = 'IMPORT',
-  EXPORT = 'EXPORT',
-}
+import { TransactionType } from '@app/common';
 
 export class TransactionDto {
   @IsNotEmpty()

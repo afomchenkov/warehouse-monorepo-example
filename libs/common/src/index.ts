@@ -5,3 +5,5 @@ export * from './entities/transaction.entity';
 export * from './entities/warehouse.entity';
 export * from './db/db.module';
 export * from './config.schema';
+export * from './utils';
+export * from './types';

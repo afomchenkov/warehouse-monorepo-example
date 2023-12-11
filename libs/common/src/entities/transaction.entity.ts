@@ -8,14 +8,10 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { TransactionType } from '../types';
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Warehouse } from './warehouse.entity';
 import { Product } from './product.entity';
-
-enum TransactionType {
-  IMPORT = 'IMPORT',
-  EXPORT = 'EXPORT',
-}
 
 registerEnumType(TransactionType, {
   name: 'TransactionType',

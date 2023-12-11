@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { configValidationSchema } from '@app/common';
 import { DbModule } from '@app/common';
 import { CalculationsControllerV1 } from './calculations-v1.controller';
@@ -26,7 +27,13 @@ import { CalculationsRepository } from './calculations.repository';
           username: configService.get('DB_USERNAME'),
           password: configService.get('DB_PASSWORD'),
           database: configService.get('DB_DATABASE'),
+          autoLoadEntities: true,
         };
+      },
+      // dataSource receives the configured DataSourceOptions and returns a Promise<DataSource>.
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options).initialize();
+        return dataSource;
       },
     }),
     DbModule,

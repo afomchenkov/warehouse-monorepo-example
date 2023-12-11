@@ -1,10 +1,14 @@
-import { Controller, Get, Post, Logger } from '@nestjs/common';
-import { CalculationsService } from './calculations.service';
 import {
-  CalculationStatus,
-  CalculationResponseDto,
-  TransactionDto,
-} from './dtos';
+  Controller,
+  Get,
+  Post,
+  Logger,
+  Body,
+  ValidationPipe,
+} from '@nestjs/common';
+import { CalculationStatus } from '@app/common';
+import { CalculationsService } from './calculations.service';
+import { CalculationResponseDto, TransactionDto } from './dtos';
 
 @Controller({
   path: 'api',
@@ -20,17 +24,35 @@ export class CalculationsControllerV1 {
     return 'calculations running...';
   }
 
-  @Post('calculate-inventory')
-  async calculateInventory(
-    transactionData: TransactionDto,
+  @Post('submit-transaction')
+  async submitTransaction(
+    @Body(ValidationPipe) transactionData: TransactionDto,
   ): Promise<CalculationResponseDto> {
     this.logger.debug(
       `Incoming transaction: ${JSON.stringify(transactionData)}`,
     );
 
-    return {
-      status: CalculationStatus.REJECTED,
-      calculationMessage: 'work in progress...',
-    };
+    try {
+      const { status, calculationMessage, transactionId } =
+        await this.calculationsService.handleTransactionSubmit(transactionData);
+
+      this.logger.debug(
+        `Handle transaction result: [${status}]:[${calculationMessage}]`,
+      );
+
+      return {
+        status,
+        calculationMessage,
+        transactionId,
+      };
+    } catch (error) {
+      this.logger.error(`Handle transaction error: [${error.message}]`);
+
+      return {
+        status: CalculationStatus.REJECTED,
+        calculationMessage: error.message,
+        transactionId: null,
+      };
+    }
   }
 }

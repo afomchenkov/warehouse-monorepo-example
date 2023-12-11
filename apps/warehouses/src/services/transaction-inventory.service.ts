@@ -6,20 +6,20 @@ import {
 } from '@nestjs/common';
 import { differenceInMonths } from 'date-fns';
 import { HttpService } from '@nestjs/axios';
-import { Inventory, Transaction } from '@app/common';
+import {
+  CalculationStatus,
+  Inventory,
+  Transaction,
+  TransactionType,
+  toDateFormat,
+} from '@app/common';
 import {
   ProductRepository,
   InventoryRepository,
   TransactionRepository,
   WarehouseRepository,
 } from '../repositories';
-import { CreateTransactionDto, TransactionType } from '../dtos';
-import { toDateFormat } from '../utils';
-
-enum CalculationStatus {
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
-}
+import { CreateTransactionDto } from '../dtos';
 
 @Injectable()
 export class TransactionInventoryService {
@@ -111,10 +111,9 @@ export class TransactionInventoryService {
 
     try {
       const {
-        // TODO: return more info on the calculation result
-        data: { status, calculationMessage /**, payload */ },
+        data: { status, calculationMessage, transactionId },
       } = await this.httpService.axiosRef.post(
-        process.env.CALCULATE_INVENTORY_URL,
+        process.env.SUBMIT_TRANSACTION_URL,
         transactionData,
         {
           headers: {
@@ -124,12 +123,9 @@ export class TransactionInventoryService {
       );
 
       if (status === CalculationStatus.ACCEPTED) {
-        // commit transaction
-        // TODO: ideally the whole operation must be moved to calculation service
-        // or SQL transaction: check calculation -> [update inventory, create transaction])
-        // or add Stored Procedure to do a daily update
-        return this.transactionRepository.createTransaction(transactionData);
+        return this.transactionRepository.getById(transactionId);
       }
+
       if (status === CalculationStatus.REJECTED) {
         const message = `Calculation result error: ${calculationMessage}`;
         this.logger.error(message);

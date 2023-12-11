@@ -3,7 +3,7 @@ import { Warehouse } from '@app/common';
 import { WarehouseRepository } from '../repositories';
 import { CustomerService } from './customer.service';
 import { CreateWarehouseDto, StockSnapshotDto } from '../dtos';
-import { calculateOccupiedArea } from '../utils';
+import { calculateOccupiedArea } from '@app/common';
 
 @Injectable()
 export class WarehouseService {

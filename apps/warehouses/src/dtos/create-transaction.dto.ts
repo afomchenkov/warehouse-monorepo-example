@@ -1,11 +1,7 @@
 import { InputType, Field } from '@nestjs/graphql';
 import { IsNotEmpty, IsEnum, IsString, IsNumber } from 'class-validator';
 import { Transform } from 'class-transformer';
-
-export enum TransactionType {
-  IMPORT = 'IMPORT',
-  EXPORT = 'EXPORT',
-}
+import { TransactionType } from '@app/common';
 
 @InputType()
 export class CreateTransactionDto {

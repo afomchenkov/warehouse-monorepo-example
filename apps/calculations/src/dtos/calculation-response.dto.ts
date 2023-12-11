@@ -1,9 +1,5 @@
-import { IsNotEmpty, IsEnum, IsString } from 'class-validator';
-
-export enum CalculationStatus {
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED',
-}
+import { IsNotEmpty, IsEnum, IsString, IsNumber } from 'class-validator';
+import { CalculationStatus } from '@app/common';
 
 export class CalculationResponseDto {
   @IsNotEmpty()
@@ -13,4 +9,8 @@ export class CalculationResponseDto {
   @IsNotEmpty()
   @IsString()
   calculationMessage: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  transactionId: number;
 }
