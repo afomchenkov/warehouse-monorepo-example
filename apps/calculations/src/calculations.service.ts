@@ -66,6 +66,19 @@ export class CalculationsService {
     return Promise.resolve();
   }
 
+  @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT, {
+    name: 'removeObsoleteInventoryRecords',
+    timeZone: 'Europe/Berlin',
+  })
+  async handleScheduledInventoryRemove(): Promise<void> {
+    this.logger.debug('Inventory remove started');
+
+    // remove or export obsolete inventory records
+
+    this.logger.debug('Inventory remove ended');
+    return Promise.resolve();
+  }
+
   /**
    * On transaction submit (IMPORT):
    *
